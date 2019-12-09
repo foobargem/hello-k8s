@@ -1,0 +1,4 @@
+---
+- include: toastcloud.yml
+- include: docker.yml
+- include: kubernetes.yml

@@ -1,0 +1,22 @@
+---
+- name: check ip rule
+  shell: "/sbin/ip rule show from {{ ansible_eth0.ipv4.address }}"
+  register: out
+
+- name: delete ip rule
+  shell: "/sbin/ip rule delete from {{ ansible_eth0.ipv4.address }}"
+  when: out.stdout != ""
+
+- name: delete tcnetutil
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - /etc/network/if-up.d/tcnetutil
+    - /etc/network/if-down.d/tcnetutil
+
+- name: configure resolver
+  template:
+    src: "{{ role_path }}/templates/etc/resolv.conf.tmpl"
+    dest: /etc/resolv.conf
+    attributes: +i

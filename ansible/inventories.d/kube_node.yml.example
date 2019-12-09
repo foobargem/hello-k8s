@@ -1,0 +1,12 @@
+---
+kube_node:
+  vars:
+    ansible_become: yes
+    ansible_become_user: root
+    ansible_user: debian
+    domain: domain.name
+  hosts:
+    kube-ctrl:
+    kube-node-1:
+    kube-node-2:
+    kube-node-3:

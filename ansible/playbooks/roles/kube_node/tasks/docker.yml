@@ -1,0 +1,38 @@
+- name: install required packages
+  apt:
+    name: "{{ packages }}"
+    update_cache: yes
+  vars:
+    packages:
+      - apt-transport-https
+      - ca-certificates
+      - curl
+      - gnupg2
+      - software-properties-common
+    
+- name: add GPG key of docker
+  apt_key:
+    url: https://download.docker.com/linux/debian/gpg
+    state: present
+
+- name: add repository of docker
+  apt_repository:
+    repo: "deb [arch=amd64] https://download.docker.com/linux/debian {{ ansible_facts['lsb']['codename'] }} stable"
+    state: present
+    update_cache: yes
+
+- name: install docker
+  apt:
+    name: "{{ packages }}"
+  vars:
+    packages:
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+
+- name: set cgroup driver
+  copy:
+    src: "{{ role_path }}/files/etc/docker/daemon.json"
+    dest: /etc/docker/daemon.json
+  notify:
+    - restart docker

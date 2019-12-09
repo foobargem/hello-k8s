@@ -1,0 +1,5 @@
+---
+- name: configure kubernetes node
+  hosts: [kube_node]
+  roles:
+    - kube_node
